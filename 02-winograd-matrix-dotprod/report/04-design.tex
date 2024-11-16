@@ -1,0 +1,273 @@
+\chapter{Конструкторский раздел}
+
+В данном разделе приведены схемы алгоритмов умножения матриц, рассмотренных в предыдущем разделе. Также для каждого алгоритма проведена оценка трудоемкости в соответствии с определённой моделью вычислений.
+
+\section{Схемы алгоритмов}
+
+\subsection{Стандартный алгоритм умножения матриц}
+
+\includeimage
+{std}
+{f}
+{h}
+{0.6 \textwidth}
+{Схема алгоритма стандартного умножения матриц}
+
+\clearpage
+
+\subsection{Алгоритм Винограда}
+
+\includeimage
+{win-01}
+{f}
+{h}
+{0.6 \textwidth}
+{Схема алгоритма Винограда. Первая часть}
+
+\clearpage
+
+\includeimage
+{win-02}
+{f}
+{h}
+{0.8 \textwidth}
+{Схема алгоритма Винограда. Вторая часть}
+
+\clearpage
+
+\subsection{Оптимизированный алгоритм Винограда}
+
+\includeimage
+{optwin}
+{f}
+{h}
+{0.8 \textwidth}
+{Схема оптимизированного алгоритма Винограда. Первая часть}
+
+\clearpage
+
+\includeimage
+{optwin-02}
+{f}
+{h}
+{0.8 \textwidth}
+{Схема оптимизированного алгоритма Винограда. Вторая часть}
+
+\clearpage
+
+\section{Оценка трудоемкости}
+
+\subsection{Модель вычислений}
+\label{chap:cmp-model}
+Операции, имеющие единичную стоимость:
+\begin{equation}
+    \label{eq:op-1}
+    \begin{gathered}
+        +, -, =, +=, -=, ==, !=, <, >, <=, >=, [], ++, {-}-,\\
+        \&\&, >>, <<, ||, \&, |
+    \end{gathered}
+\end{equation}
+
+Операции, имеющие двойную стоимость:
+\begin{equation}
+    \label{eq:op-2}
+    *, /, \%, *=, /=, \%=, \text{len}()
+\end{equation}
+
+Трудоемкость условного оператора:
+\begin{equation}
+    \label{eq:if}
+    f_{if} = f_{\text{условия}} + 
+    \begin{cases}
+        \text{min}(f_1, f_2), & \text{лучший случай}\\
+        \text{max}(f_1, f_2), & \text{худший случай}
+    \end{cases}
+\end{equation}
+
+Трудоемкость цикла:
+\begin{equation}
+    \label{eq:loop}
+    \begin{gathered}
+        f_{loop} = f_{\text{инициализация}} + f_{\text{сравнения}} + M_{\text{итераций}} \times (f_{\text{тело}} +\\
+        + f_{\text{инкремент}} + f_{\text{сравнения}})
+    \end{gathered}
+\end{equation}
+
+Дальнейший расчет трудоемкости будет производиться с использованием данной модели.
+
+\subsection{Трудоемкость классического алгоритма}
+
+Стоимость начальной инициализации рассчитывается по формуле~(\ref{eq:init-std}):
+\begin{equation}
+    \label{eq:init-std}
+    \begin{gathered}
+        f_{init} = (2 + 1) + (2 + 1 + 1) + (2 + 1 + 1) \\
+        + 2 + n \times (2 + p)
+    \end{gathered} 
+\end{equation}
+
+Стоимость основного цикла рассчитывается по формуле~(\ref{eq:main-std}):
+\begin{equation}
+    \label{eq:main-std}
+    \begin{gathered}
+        f_{main} = 2 + n \times (2 + p \times (2 + m \times (2 + 9)))
+    \end{gathered} 
+\end{equation}
+
+Итоговая стоимость трудоемкости рассчитывается по формуле~(\ref{eq:sum-std}):
+\begin{equation}
+    \label{eq:sum-std}
+    \begin{gathered}
+        f = f_{main} + f_{init} = 15 + 4 \times n + 3 \times n \times p + 11 \times m \times n \times p  \\ 
+        \approx 11 \times m \times n \times p = O(N^3)
+    \end{gathered} 
+\end{equation}
+
+\subsection{Трудоемкость алгоритма Винограда}
+
+Стоимость начальной инициализации рассчитывается по формуле~(\ref{eq:init-w}):
+\begin{equation}
+    \label{eq:init-w}
+    \begin{gathered}
+        f_{init} = (2 + 1) + (2 + 1 + 1) + (2 + 1 + 1) \\
+        + 2 + n \times (2 + p) = 13 + n \times (2 + p)
+    \end{gathered} 
+\end{equation}
+
+Стоимость инициализации вспомогательных массивов вычисляется по формулам~(\ref{eq:initrow-w}) и~(\ref{eq:initcol-w}):
+\begin{equation}
+    \label{eq:initrow-w}
+    \begin{gathered}
+        f_{row} = 2 + 2 \times n + 8.5 \times m \times n
+    \end{gathered} 
+\end{equation}
+
+\begin{equation}
+    \label{eq:initcol-w}
+    \begin{gathered}
+        f_{col} = 2 + 2 \times n + 8.5 \times m \times p
+    \end{gathered} 
+\end{equation}
+
+Стоимость основного цикла рассчитывается по формуле~(\ref{eq:main-w}):
+\begin{equation}
+    \label{eq:main-w}
+    \begin{gathered}
+        f_{main} = 2 + 2 \times n + n \times p \times (9 + 15 \times m) \\
+        = 2 + 2 \times n + 9 \times n \times p + 15 \times m \times n \times p
+    \end{gathered} 
+\end{equation}
+
+Добавочная трудоемкость цикла рассчитывается по формуле~(\ref{eq:noteven-loop-w}):
+\begin{equation}
+    \label{eq:noteven-loop-w}
+    \begin{gathered}
+        f_{check} = 3 + 
+        \begin{cases}
+            0, & \text{чётная} \\
+            2 + 2n + 15\times n \times p, & \text{иначе}
+        \end{cases}
+    \end{gathered}  
+\end{equation}
+
+Итоговая стоимость трудоемкости рассчитывается по формуле~(\ref{eq:sum-w}):
+\begin{equation}
+    \label{eq:sum-w}
+    \begin{gathered}
+        f = f_{init} + f_{row} + f_{col} + f_{main} + f_{check}  
+    \end{gathered} 
+\end{equation}
+
+В лучшем случае трудоемкость алгоритма составляет:
+\begin{equation}
+    \label{eq:best-w}
+    \begin{gathered}
+        f = 13 + n \times (2 + p) + 4 + 4 \times n + 8.5 \times m \times n + 8.5 \times m \times p + \\
+        2 + 2n + 9 \times n \times p + 15 \times m \times n \times p \approx 15 \times m \times n \times p = O(N^3)
+    \end{gathered} 
+\end{equation}
+
+В худшем случае трудоемкость алгоритма составляет:
+\begin{equation}
+    \label{eq:worst-w}
+    \begin{gathered}
+        f = 13 + n \times (2 + p) + 4 + 4 \times n + 8.5 \times m \times n + 8.5 \times m \times p + \\
+        2 + 2 \times n + 9 \times n \times p + 15 \times m \times n \\ \times p + 2 + 2 \times n + 15 \times n \times p \approx 15  \\\times m \times n \times p = O(N^3)
+    \end{gathered} 
+\end{equation}
+
+\subsection{Трудоемкость оптимизированного алгоритма Винограда}
+
+Стоимость начальной инициализации рассчитывается по формуле~(\ref{eq:init-w-opt}):
+\begin{equation}
+    \label{eq:init-w-opt}
+    \begin{gathered}
+        f_{init} = (2 + 1) + (2 + 1 + 1) + (2 + 1 + 1) \\
+        + 2 + n \times (2 + p) = 13 + n \times (2 + p)
+    \end{gathered} 
+\end{equation}
+
+Стоимость инициализации вспомогательных массивов вычисляется по формулам~(\ref{eq:initrow-w-opt}) и~(\ref{eq:initcol-w-opt}):
+\begin{equation}
+    \label{eq:initrow-w-opt}
+    \begin{gathered}
+        f_{row} = 2 - 2.5 \times n + 4.5 \times m \times n
+    \end{gathered} 
+\end{equation}
+
+\begin{equation}
+    \label{eq:initcol-w-opt}
+    \begin{gathered}
+        f_{col} = 2 - 2.5 \times n + 4.5 \times m \times p
+    \end{gathered} 
+\end{equation}
+
+Стоимость основного цикла рассчитывается по формуле~(\ref{eq:main-w-opt}):
+\begin{equation}
+    \label{eq:main-w-opt}
+    \begin{gathered}
+        f_{main} = 2 + 2 \times n + 16.5 \times p \times n + 8.5 \times m \times n \times p
+    \end{gathered} 
+\end{equation}
+
+Добавочная трудоемкость цикла рассчитывается по формуле~(\ref{eq:noteven-loop-w}):
+\begin{equation}
+    \label{eq:noteven-loop-w}
+    \begin{gathered}
+        f_{check} = 3 + 
+        \begin{cases}
+            0, & \text{чётная} \\
+            2 + 2 \times n + 15 \times n \times p, & \text{иначе}
+        \end{cases}
+    \end{gathered}  
+\end{equation}
+
+Итоговая стоимость трудоемкости рассчитывается по формуле~(\ref{eq:sum-w-opt}):
+\begin{equation}
+    \label{eq:sum-w-opt}
+    \begin{gathered}
+        f = f_{init} + f_{row} + f_{col} + f_{main} + f_{check}  
+    \end{gathered} 
+\end{equation}
+
+В лучшем случае трудоемкость алгоритма составляет:
+\begin{equation}
+    \label{eq:best-w}
+    \begin{gathered}
+        f = 4 - 5 \times n + 4.5 \times m \times n + 4.5 \times m \times p + 2 + 2 \times n + 16.5 \times p \times n + \\
+        8.5 \times m \times n \times p \approx 8.5 \times m \times n \times p = O(n^3)
+    \end{gathered} 
+\end{equation}
+
+В худшем случае трудоемкость алгоритма составляет:
+\begin{equation}
+    \label{eq:worst-w}
+    \begin{gathered}
+        f = 4 - 5 \times n + 4.5 \times m \times n + 4.5 \times m \times \\ p + 2 + 2 \times n + 16.5 \times p \times n + 8.5 \times m \times n \times p + \\
+        2 + 2 \times n + 15 \times p \times n \approx 8.5 \times m \times n \times p = O(n^3)
+    \end{gathered} 
+\end{equation}
+
+\section*{Вывод}
+
+В разделе были приведены схемы алгоритмов умножения матриц, а также рассчитана их трудоемкость. В данной модели вычислений все три алгоритма имеют кубическую сложность, а самым маленьким коэффициентом обладает оптимизированный алгоритм Винограда.
